@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Open+Sans:wght@300;400;500;600&display=swap");
+* {
+  font-family: "Inter", sans-serif;
+}
+.descricao {
+  margin-top: -50px;
+}
+
+.barra {
+  width: 100%;
+  height: 60px;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.instituicao-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4em;
+}
+
+.instituicao {
+  text-align: left;
+}
+.img {
+  margin-right: 30px;
+}
+
+.titulo {
+  color: #66cdf4;
+  padding-right: 0.5em;
+}
+
+.titulo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5em;
+}
+
+.texto {
+  color: #fff;
+  text-align: center;
+  padding-left: 0.5em;
+}
+
+.imagem-container {
+  margin-right: 10px;
+  text-align: center; /* Espaço entre a imagem e o texto */
+}
+
+.texto-container {
+  flex-grow: 1; /* Isso faz com que o texto ocupe o espaço restante */
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  background-color: #66cdf4;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition-duration: 0.4s;
+}
+
+.button:hover {
+  background-color: #66cdf4;
+  color: black;
+  text-align: center;
+}
