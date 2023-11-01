@@ -12,7 +12,14 @@ function Curso() {
 
   console.log(cursoId)
 
+  const usuarioId = localStorage.getItem('usuarioSessao')
+
   const [Curso, setCurso] = useState("")
+
+  const requestData = {
+    usuarioId: usuarioId,
+    cursoId: cursoId
+  };
 
   useEffect(() => {
     const encontrarCurso = async () => {
@@ -37,6 +44,25 @@ function Curso() {
     };
     encontrarCurso();
   },[])
+
+  const matricular = () => {
+    fetch("http://localhost:8080/aprendex/matricula/save", {
+      method: "post",
+      body: JSON.stringify(requestData),
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json"
+      }
+    })
+      .then((retorno) => retorno.json())
+      .then((retorno_convertido) => {
+        if (retorno_convertido.mensagem !== undefined) {
+          alert(retorno_convertido.mensagem);
+        } else {
+          alert("matricula realizada com sucesso")
+        }
+      });
+  };
 
   return (
     <div>
@@ -74,7 +100,7 @@ function Curso() {
           </p>
         </div>
         <div className="button-container">
-          <button className="button">Matricule-se</button>
+          <button className="button" onClick={matricular}>Matricule-se</button>
         </div>
       </div>
 

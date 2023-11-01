@@ -32,7 +32,7 @@ function Maps(enderecoCurso, enderecoUsario) {
             setLngCurso(lng);
         });
 
-    fromAddress("Avenida Fundibem, 568 - Casa Grande - Diadema, SP.")
+    fromAddress("198 rua glauber rocha - serraria - Diadema, SP.")
         .then(({ results }) => {
             const { lat, lng } = results[0].geometry.location;
             setlatUsuario(lat);

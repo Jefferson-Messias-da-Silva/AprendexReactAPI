@@ -13,7 +13,9 @@ function CadastroCurso() {
     duracao: 0,
     email: "",
     valor: 0.0,
-    vagas: 0
+    vagas: 0,
+    numero: "",
+    cep: ""
   };
 
   const [ObjFile, setObjFile] = useState('');
@@ -34,8 +36,6 @@ function CadastroCurso() {
     data.append('file',ObjFile)
     data.append('curso',JSON.stringify(ObjCurso))
 
-    console.log(data)
-
     fetch("http://localhost:8080/aprendex/curso/save", {
       method: "post",
       body: data,
@@ -49,6 +49,24 @@ function CadastroCurso() {
         }
       });
   };
+
+  const checkCEP = (e) => {
+    const cep = e.target.value.replace(/\D/g, '')
+    console.log(cep.length )
+    if (cep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.erro) {
+            ObjCurso.endereco = data.logradouro + ", " + ObjCurso.numero + " - " + data.bairro + " - " + data.localidade + " - " + data.uf
+          } else {
+            alert("CEP inválido. Por favor, verifique o CEP inserido.");
+          }
+        })
+    } else {
+      alert("CEP inválido. Por favor, verifique o CEP inserido.");
+    }
+  }
 
   return (
     <div>
@@ -99,15 +117,28 @@ function CadastroCurso() {
                 </div>
               </div>
               <div className="input-group">
-                <div className="input-box">
-                  <label htmlFor="endereco">Endereço</label>
+              <div className="input-box">
+                  <label htmlFor="NUMERO">Numero</label>
                   <input
-                    placeholder="Digite o endereço"
+                    placeholder="N° Residencial"
                     required
-                    id="endereco"
-                    type="string"
-                    name="endereco"
+                    id="numero"
                     onChange={aoDigitar}
+                    type="text"
+                    name="numero"
+                  />
+                </div>
+
+                <div className="input-box">
+                  <label htmlFor="CEP">CEP</label>
+                  <input
+                    placeholder="Digite o CEP"
+                    required
+                    id="cep"
+                    type="text"
+                    name="cep"
+                    onChange={aoDigitar}
+                    onBlur={checkCEP}
                   />
                 </div>
                 <div className="input-box">
@@ -116,7 +147,7 @@ function CadastroCurso() {
                     placeholder="Digite a categoria"
                     required
                     id="categoria"
-                    type="string"
+                    type="text"
                     name="categoria"
                     onChange={aoDigitar}
                   />

@@ -29,7 +29,7 @@ function Login() {
         if (retorno_convertido.mensagem !== undefined) {
           alert(retorno_convertido.mensagem);
         } else {
-          localStorage.setItem("usuario", retorno_convertido);
+          localStorage.setItem("usuarioSessao", retorno_convertido.id);
         }
       });
   };
