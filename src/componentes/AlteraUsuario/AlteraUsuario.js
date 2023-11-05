@@ -5,7 +5,8 @@ import AppNavbar from "../AppNavBar";
 
 function AlteraUsuario() {
 
-  const usuarioId = window.location.pathname.split('/').pop();
+  const usuarioId = localStorage.getItem('usuarioSessao');
+
 
   const usuario = {
     id: "",
@@ -65,7 +66,7 @@ function AlteraUsuario() {
         if (retorno_convertido.mensagem !== undefined) {
           alert(retorno_convertido.mensagem);
         } else {
-          alert("Cadastro realizado com sucesso");
+          alert("Alteração realizada com sucesso");
         }
       });
   };
@@ -88,17 +89,20 @@ function AlteraUsuario() {
     }
   }
 
+  function home() {
+    window.location.href = "/home"
+}
+
   return (
     <div>
-      <AppNavbar />
       <div className="bodyMeusDados">
         <div className="container-alteraUsuario">
           <div className="formalteraUsuario">
             <div className="form-headeralteraUsuario">
               <h1 className="meus-dados-header">Meus Dados</h1>
             </div>
-            <div className="input-group">
-              <div className="input-box">
+            <div className="alteraDadosinput-group">
+              <div className="alteraDadosinput-box">
                 
                 <label>Login:</label>
                 <input
@@ -109,7 +113,7 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Nome:</label>
                 <input
                   type="text"
@@ -119,7 +123,7 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Sobrenome:</label>
                 <input
                   type="text"
@@ -130,7 +134,7 @@ function AlteraUsuario() {
                 />
               </div>
 
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Email:</label>
                 <input
                   type="text"
@@ -139,7 +143,7 @@ function AlteraUsuario() {
                   disabled
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Número de Telefone:</label>
                 <input
                   type="text"
@@ -148,7 +152,7 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Data de Nascimento:</label>
                 <input
                   type="date"
@@ -158,7 +162,7 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Número da Casa:</label>
                 <input
                   type="text"
@@ -167,7 +171,7 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
 
                 <label>CEP:</label>
                 <input
@@ -178,7 +182,7 @@ function AlteraUsuario() {
                   onBlur={checkCEP}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Senha Atual:</label>
                 <input
                   type="password"
@@ -186,7 +190,7 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="input-box">
+              <div className="alteraDadosinput-box">
                 <label>Confirmar Senha:</label>
                 <input
                   type="password"
@@ -195,12 +199,18 @@ function AlteraUsuario() {
                 />
               </div>
             </div>
-            <div className="continue-button button-container">
+            <div className="alteraDadoscontinue-button alteraDadosbutton-container">
               <input
-                className="inputCadastrar"
+                className="inputAlterar"
                 type="button"
                 value="Alterar"
                 onClick={alterar}
+              />
+              <input
+                className="inputAlterar"
+                type="button"
+                value="Cancelar"
+                onClick={home}
               />
             </div>
           </div>

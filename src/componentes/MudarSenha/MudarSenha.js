@@ -52,7 +52,7 @@ function MudarSenha() {
                             </div>
                             <div className="continue-button">
                                 <input
-                                    className="inputCadastrar"
+                                    className="inputLogin"
                                     type="button"
                                     value="Cadastrar"
                                     onClick={mudarSenha}

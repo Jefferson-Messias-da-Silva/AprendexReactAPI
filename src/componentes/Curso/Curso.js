@@ -66,9 +66,6 @@ function Curso() {
 
   return (
     <div>
-
-      <div>
-        <AppNavbar />
         <div className="barra">
           <a href="http://www.example.com">
             <img src="" alt="imagem de exemplo" width="40" height="40" />
@@ -102,7 +99,6 @@ function Curso() {
         <div className="button-container">
           <button className="button" onClick={matricular}>Matricule-se</button>
         </div>
-      </div>
 
       <Maps />
 

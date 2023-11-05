@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import AppNavbar from "../AppNavBar";
 import "./stylesLogin.css";
-import loginImage from "../img/loginImg.png";
+import { ReactComponent as Img } from "../img/loginphoto.svg";
+import Cadastro from "../Cadastro/Cadastro";
 
 function Login() {
   const usuarioLogin = {
@@ -34,22 +35,26 @@ function Login() {
       });
   };
 
+  function cadastro() {
+    window.location.href = "/cadastro"
+  }
+
   return (
     <div className="bodyLogin">
     <div className="login-container">
       <div className="form-imageLogin">
-        <img src={loginImage}></img>
+      <div className="form-image">
+        <Img />
+      </div>
       </div>
       <div className="formLogin">
         <form>
           <div className="form-headerLogin">
             <div className="title">
-              <h1>Faça login na sua conta</h1>
+              <h1 className="h1Login">Faça login na sua conta</h1>
             </div>
             <div className="login-button">
-              <button>
-                <a href="/cadastro">Ainda não tem uma conta? Inscreva-se</a>
-              </button>
+                    <input onClick={cadastro} type="button" value="Ainda não tem uma conta? Inscreva-se" className="inputLogin" />
             </div>
           </div>
           <div className="input-box">

@@ -1,0 +1,34 @@
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.content-item {
+  flex-basis: calc(33.333% - 20px);
+  background-color: #f5f5f5;
+  padding: 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.content-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ver-mais {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 12%; /* Adicionando bordas arredondadas */
+}
+
+
+.ver-mais:hover {
+  background-color: #66cdf4;
+}

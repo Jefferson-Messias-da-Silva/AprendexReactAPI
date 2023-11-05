@@ -70,7 +70,6 @@ function CadastroCurso() {
 
   return (
     <div>
-      <AppNavbar />
       <div className="bodyCadastroCurso">
         <div className="containerCadastroCurso">
           <div className="formCadastroCurso">
@@ -215,7 +214,7 @@ function CadastroCurso() {
               </div>
               <div className="continue-button">
                 <input
-                  className="inputCadastrar"
+                  className="inputLogin"
                   type="button"
                   value="Cadastrar"
                   onClick={cadastrarCurso}

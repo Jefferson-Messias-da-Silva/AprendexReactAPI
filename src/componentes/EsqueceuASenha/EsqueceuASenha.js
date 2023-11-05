@@ -47,7 +47,7 @@ function EsqueceuASenha() {
                                 />
                             </div>
                             <div className="continue-button">
-                                <input className="inputCadastrar"
+                                <input className="inputLogin"
                                     value="Continuar"
                                     type="button"
                                     onClick={enviarEmail} />

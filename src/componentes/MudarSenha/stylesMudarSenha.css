@@ -1,7 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Open+Sans:wght@300;400;500;600&display=swap");
-* {
-  font-family: "Inter", sans-serif;
-}
 
 .bodyMudarSenha {
   width: 100%;
@@ -117,7 +114,7 @@
 
 .input-box label,
 .gender-title h6 {
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #000000c0;
 }

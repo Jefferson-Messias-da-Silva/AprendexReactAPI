@@ -1,62 +1,110 @@
-import React, { useState, Component } from "react";
-import ReactDOM from 'react-dom';
-import logo from "./img/LogoVetorizada.png";
-import "./stylesNavBar.css";
+import React, { useState, useEffect } from "react";
+import { Button } from "./Home/Button";
+import { NavLink } from "reactstrap";
+import "./NavBar.css";
+import { useNavigate } from "react-router-dom";
 
-import {
-  Button,
-  Collapse,
-  Nav,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  NavItem,
-  NavLink
-} from "reactstrap";
-import { Link } from "react-router-dom";
-const AppNavbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+function Navbar() {
+  var [busca, setBusca] = useState();
 
-  const logout = () => {
-    localStorage.clear();
+  const aoDigitar = (e) => {
+    setBusca(e.target.value);
+  };
+  const navigate = useNavigate();
+  const buscar = () => {
+    navigate(`/teste/${busca}`);
+  };
+  const [click, setClick] = useState(false);
+  const [button, setButton] = useState(true);
+
+  const handleClick = () => setClick(!click);
+  const closeMobileMenu = () => setClick(false);
+
+  const showButton = () => {
+    if (window.innerWidth <= 960) {
+      setButton(false);
+    } else {
+      setButton(true);
+    }
   };
 
-  return (
-    <Navbar color="dark" dark expand="md">
-      <NavbarBrand tag={Link} to="/">
-        <img src={logo} width="100px" height="50px" />
-      </NavbarBrand>
-      <Collapse isOpen={isOpen} navbar>
-        <Nav
-          className="justify-content-center"
-          style={{ width: "100%" }}
-          navbar
-        >
-          <NavItem>
-            <NavLink href="/">Home</NavLink>
-          </NavItem>
-          {localStorage.getItem("usuario") ? (
-            <NavItem></NavItem>
-          ) : (
-            <NavItem>
-              <NavLink href="/login">Login</NavLink>
-            </NavItem>
-          )}
-          <NavItem>
-            <NavLink href="/cadastro">Cadastrar-se</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="/sobre">Sobre</NavLink>
-          </NavItem>
-          <NavItem>
-          <Button variant="danger" onClick={logout} href="/home">
-            Sair
-          </Button>
-        </NavItem>
-        </Nav>
-      </Collapse>
-    </Navbar>
-  );
-};
+  useEffect(() => {
+    showButton();
+  }, []);
 
-export default AppNavbar;
+  window.addEventListener("resize", showButton);
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <NavLink to="/" className="navbar-logo" onClick={closeMobileMenu}>
+            Aprendex
+          </NavLink>
+          <div className="menu-icon" onClick={handleClick}>
+            <i className={click ? "fas fa-times" : "fas fa-bars"} />
+          </div>
+          <ul className={click ? "nav-menu active" : "nav-menu"}>
+            <li className="nav-item">
+              <NavLink href="/" className="nav-links" onClick={closeMobileMenu}>
+                Home
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
+                href="/Cursos"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                Cursos
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                href="/Cursos"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                Meus Cursos
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                href="/favoritos"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                Favoritos
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                href="/favoritos"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                Sobre-nós
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                href="/"
+                className="nav-links-mobile"
+                onClick={closeMobileMenu}
+              >
+                Cadastre-se
+              </NavLink>
+            </li>
+          </ul>
+          {button && <Button buttonStyle="btn--primary2">Cadastrar</Button>}
+          <input value={busca} onChange={aoDigitar}></input>
+          <input type="button" onClick={buscar} value="Buscar"></input>
+        </div>
+      </nav>
+    </>
+  );
+}
+
+export default Navbar;
+

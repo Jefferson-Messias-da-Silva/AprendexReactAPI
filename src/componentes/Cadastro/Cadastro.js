@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import AppNavbar from "../AppNavBar";
 import "./stylesCadastro.css";
-import cadastroImage from "../img/cadastroImg.png";
+import cadastroImage from "../img/cadastrophoto.svg";
 
 function Cadastro() {
   const usuario = {
@@ -12,7 +12,6 @@ function Cadastro() {
     email: "",
     dtnascimento: "",
     avaliacao: 0.0,
-    nota: 0.0,
     cursoFavorito: [],
     cnpj: "",
     cpf: "",
@@ -20,16 +19,16 @@ function Cadastro() {
     ativo: false,
     cep: "",
     numero: "",
-    endereco: ""
+    endereco: "",
+    perfil: {}
   };
 
   const [ObjUsuario, setObjUsuario] = useState(usuario);
 
-  useEffect(() => { }, []);
-
   const aoDigitar = (e) => {
     setObjUsuario({ ...ObjUsuario, [e.target.name]: e.target.value });
   };
+
 
   const cadastrar = () => {
     fetch("http://localhost:8080/aprendex/usuario/save", {
@@ -46,6 +45,7 @@ function Cadastro() {
           alert(retorno_convertido.mensagem);
         } else {
           alert("Cadastro realizado com sucesso");
+          window.location.href = "/home"
         }
       });
   };
@@ -62,7 +62,9 @@ function Cadastro() {
         .then(res => res.json())
         .then(data => {
           if (!data.erro) {
-            ObjUsuario.endereco = data.logradouro + ", " + ObjUsuario.numero + " - " + data.bairro + " - " + data.localidade + " - " + data.uf
+            setObjUsuario((prevState) => ({ 
+              ...prevState,
+              endereco: data.logradouro + ", " + ObjUsuario.numero + " - " + data.bairro + " - " + data.localidade + " - " + data.uf}));
           } else {
             alert("CEP inválido. Por favor, verifique o CEP inserido.");
           }
@@ -72,24 +74,45 @@ function Cadastro() {
     }
   }
 
+  const encontrarPerfil = (event) => {
+    const tipo = event.target.value;
+    fetch("http://localhost:8080/aprendex/perfil/tipo", {
+      method: "post",
+      body: tipo,
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json"
+      }
+    })
+      .then((retorno) => retorno.json())
+      .then((retorno_convertido) => {
+        if (retorno_convertido.mensagem !== undefined) {
+          alert(retorno_convertido.mensagem);
+        } else {
+          console.log(retorno_convertido);
+          setObjUsuario((prevState) => ({
+            ...prevState,
+            perfil: retorno_convertido,
+          }));
+        }
+      });
+  }
+
 
   return (
-    <div style={{ marginBottom: 6 + 'em' }}>
-      <AppNavbar />
-      {JSON.stringify(ObjUsuario)}
       <div className="bodyCadastro">
         <div className="cadastro-container">
           <div className="form-imagecadastro">
             <img src={cadastroImage} />
           </div>
           <div className="formcadastro">
-            <form>
+            <form onSubmit={cadastrar}>
               <div className="form-headercadastro">
                 <div className="title">
                   <h1>Cadastre-se</h1>
                 </div>
                 <div className="login-button">
-                  <input onClick={login} type="button" value="Entrar" className="inputCadastrar" />
+                  <input onClick={login} type="button" value="Entrar" className="inputLogin" />
                 </div>
               </div>
 
@@ -158,9 +181,9 @@ function Cadastro() {
                 <div className="input-box">
                   <label htmlFor="data">Data de Nascimento</label>
                   <input
-                    id="data"
+                    id="dtnascimento"
                     type="date"
-                    name="data"
+                    name="dtnascimento"
                     onChange={aoDigitar}
                     required
                   />
@@ -202,18 +225,6 @@ function Cadastro() {
                   />
                 </div>
 
-                {ObjUsuario.tipo === 1 && <div className="input-box">
-                  <label htmlFor="cpf">CPF:</label>
-                  <input
-                    placeholder="000.000.000-00"
-                    required
-                    id="cpf"
-                    type="text"
-                    name="cpf"
-                    onChange={aoDigitar}
-                  />
-                </div>}
-
               </div>
 
               <div className="gender-inputs">
@@ -222,36 +233,36 @@ function Cadastro() {
                 </div>
 
                 <div className="gender-group">
+                  <fieldset required>
                   <div className="gender-input">
-                    <input id="aluno" type="radio" name="tipo" value="1" onChange={aoDigitar} />
+                    <input id="aluno" type="radio" name="tipo" value="0" onChange={encontrarPerfil} required/>
                     <label htmlFor="aluno">Aluno</label>
                   </div>
 
                   <div className="gender-input">
-                    <input id="professor" type="radio" name="tipo" value="2" onChange={aoDigitar} />
+                    <input id="professor" type="radio" name="tipo" value="1" onChange={encontrarPerfil} required/>
                     <label htmlFor="professor">Professor</label>
                   </div>
 
                   <div className="gender-input">
-                    <input id="intituicao" type="radio" name="tipo" value="3" onChange={aoDigitar} />
+                    <input id="intituicao" type="radio" name="tipo" value="2" onChange={encontrarPerfil} required/>
                     <label htmlFor="intituicao">Instituição</label>
                   </div>
+                  </fieldset>
                 </div>
               </div>
 
               <div className="continue-button">
                 <input
-                  className="inputCadastrar"
-                  type="button"
+                  className="inputLogin"
+                  type="submit"
                   value="Cadastrar"
-                  onClick={cadastrar}
                 />
               </div>
             </form>
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
