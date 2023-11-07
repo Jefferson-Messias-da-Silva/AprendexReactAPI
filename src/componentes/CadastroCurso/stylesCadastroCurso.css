@@ -16,6 +16,10 @@
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.212);
 }
 
+.formformCadastroCurso{
+  width: 50%;
+}
+
 
 .formCadastroCurso {
   width: 100%;

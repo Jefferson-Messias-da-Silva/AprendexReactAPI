@@ -95,6 +95,18 @@
   cursor: pointer;
 }
 
+.alteraCursocontinue-input {
+  width: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: none;
+  background-color: #66cdf4;
+  padding: 0.62rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
 .alteraCursocontinue-button button:hover {
   background-color: #66cdf4;
 }

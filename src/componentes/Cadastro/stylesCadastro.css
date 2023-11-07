@@ -7,8 +7,8 @@
 }
 
 .cadastro-container {
-  width: 80%;
-  height: 80vh;
+  width: 95%;
+  height: 95vh;
   display: flex;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.212);
 }
@@ -150,7 +150,7 @@
   color: #000000c0;
 }
 
-.continue-button button {
+.continue-buttoncadastro button {
   width: 100%;
   margin-top: 2.5rem;
   border: none;
@@ -160,11 +160,11 @@
   cursor: pointer;
 }
 
-.continue-button button:hover {
+.continue-buttoncadastro button:hover {
   background-color: #66cdf4;
 }
 
-.continue-button button a {
+.continue-buttoncadastro button a {
   text-decoration: none;
   font-size: 0.93rem;
   font-weight: 500;
@@ -172,19 +172,19 @@
 }
 
 @media screen and (max-width: 1330px) {
-  .form-image {
+  .form-imagecadastro {
     display: none;
   }
-  .container {
+  .cadastro-container {
     width: 50%;
   }
-  .form {
+  .formcadastro {
     width: 100%;
   }
 }
 
 @media screen and (max-width: 1064px) {
-  .container {
+  .cadastro-container {
     width: 90%;
     height: auto;
   }

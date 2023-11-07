@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "./stylesAlteraUsuario.css"; // Importando o arquivo CSS
-import { Navbar } from "reactstrap";
-import AppNavbar from "../AppNavBar";
+import "./stylesAlteraUsuario.css";
 
 function AlteraUsuario() {
+
+  function logado() {
+    if (localStorage.getItem('usuarioSessao') === null) {
+      alert('Para acessar essa página você precisa realizar o login!')
+      window.location.href = "/home"
+    }
+  }
+
+  logado();
 
   const usuarioId = localStorage.getItem('usuarioSessao');
 
@@ -19,10 +26,15 @@ function AlteraUsuario() {
     cep: "",
     numero: "",
     senha: "",
-    endereco: ""
+    endereco: "",
+    perfil: {}
   };
 
   const [ObjUsuario, setObjUsuario] = useState(usuario);
+
+  const [ObjPerfil, setObjPerfil] = useState(usuario.perfil);
+
+  const [Pessoa, setPessoa] = useState(false);
 
   const aoDigitar = (e) => {
     setObjUsuario({ ...ObjUsuario, [e.target.name]: e.target.value });
@@ -45,12 +57,22 @@ function AlteraUsuario() {
             window.location.href = "/home";
           } else {
             setObjUsuario(retorno_convertido);
-            return retorno_convertido;
+            setObjPerfil(retorno_convertido.perfil);
           }
         });
     };
     encontrarUsuario();
   }, [])
+
+  useEffect(() => {
+    if (ObjPerfil && ObjPerfil.tipo !== 2) {
+      setPessoa(true);
+    } else {
+      setPessoa(false);
+    }
+  }, [ObjUsuario, ObjPerfil]);
+
+
 
   const alterar = () => {
     fetch("http://localhost:8080/aprendex/usuario/altera", {
@@ -82,16 +104,18 @@ function AlteraUsuario() {
             ObjUsuario.endereco = data.logradouro + ", " + ObjUsuario.numero + " - " + data.bairro + " - " + data.localidade + " - " + data.uf
           } else {
             alert("CEP inválido. Por favor, verifique o CEP inserido.");
+            document.getElementById('cep').value = '';
           }
         })
     } else {
       alert("CEP inválido. Por favor, verifique o CEP inserido.");
+      document.getElementById('cep').value = '';
     }
   }
 
   function home() {
     window.location.href = "/home"
-}
+  }
 
   return (
     <div>
@@ -103,7 +127,6 @@ function AlteraUsuario() {
             </div>
             <div className="alteraDadosinput-group">
               <div className="alteraDadosinput-box">
-                
                 <label>Login:</label>
                 <input
                   type="text"
@@ -123,17 +146,20 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
-              <div className="alteraDadosinput-box">
-                <label>Sobrenome:</label>
-                <input
-                  type="text"
-                  name="sobrenome"
-                  id="sobrenome"
-                  value={ObjUsuario.sobrenome}
-                  onChange={aoDigitar}
-                />
-              </div>
-
+              {Pessoa ? (
+                <div className="alteraDadosinput-box">
+                  <label>Sobrenome:</label>
+                  <input
+                    type="text"
+                    name="sobrenome"
+                    id="sobrenome"
+                    value={ObjUsuario.sobrenome}
+                    onChange={aoDigitar}
+                  />
+                </div>) : (
+                  ''
+                )
+              }
               <div className="alteraDadosinput-box">
                 <label>Email:</label>
                 <input
@@ -152,18 +178,22 @@ function AlteraUsuario() {
                   onChange={aoDigitar}
                 />
               </div>
+              {Pessoa ? (
+                <div className="alteraDadosinput-box">
+                  <label>Data de Nascimento:</label>
+                  <input
+                    type="text"
+                    name="dtnascimento"
+                    id="dtnascimento"
+                    value={ObjUsuario.dtnascimento}
+                    onChange={aoDigitar}
+                  />
+                </div>) : (
+                ''
+              )
+              }
               <div className="alteraDadosinput-box">
-                <label>Data de Nascimento:</label>
-                <input
-                  type="date"
-                  name="dtnascimento"
-                  id="dtnascimento"
-                  value={ObjUsuario.dtnascimento}
-                  onChange={aoDigitar}
-                />
-              </div>
-              <div className="alteraDadosinput-box">
-                <label>Número da Casa:</label>
+                <label>Número:</label>
                 <input
                   type="text"
                   name="numero"
@@ -184,14 +214,6 @@ function AlteraUsuario() {
               </div>
               <div className="alteraDadosinput-box">
                 <label>Senha Atual:</label>
-                <input
-                  type="password"
-                  value={ObjUsuario.senha}
-                  onChange={aoDigitar}
-                />
-              </div>
-              <div className="alteraDadosinput-box">
-                <label>Confirmar Senha:</label>
                 <input
                   type="password"
                   value={ObjUsuario.senha}

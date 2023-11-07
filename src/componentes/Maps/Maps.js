@@ -67,7 +67,8 @@ function Maps(enderecoCurso, enderecoUsario) {
         return (<div>Carregando...</div>);
     }
     return (
-        <GoogleMap zoom={15} center={positionCurso} mapContainerClassName="map-container">
+        <div className='maps'>
+        <GoogleMap zoom={60} center={positionCurso} mapContainerClassName="map-container">
             <Marker position={positionCurso} />
             <Marker position={positionUsuario} />
             <DirectionsService
@@ -80,7 +81,7 @@ function Maps(enderecoCurso, enderecoUsario) {
             ></DirectionsService>
             <DirectionsRenderer directions={response} />
         </GoogleMap>
-
+    </div>
 
     );
 }

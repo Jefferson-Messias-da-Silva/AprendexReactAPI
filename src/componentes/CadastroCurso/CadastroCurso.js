@@ -1,8 +1,18 @@
-import { useState } from "react";
-import AppNavbar from "../AppNavBar";
+import { useState, useEffect } from "react";
 import "./stylesCadastroCurso.css";
 
 function CadastroCurso() {
+
+  function logado() {
+    if (localStorage.getItem('usuarioSessao') === null) {
+      alert('Para acessar essa página você precisa realizar o login!')
+      window.location.href = "/home"
+    }
+  }
+
+  logado();
+
+  const usuarioId = localStorage.getItem('usuarioSessao');
 
   const curso = {
     nome: "",
@@ -15,26 +25,59 @@ function CadastroCurso() {
     valor: 0.0,
     vagas: 0,
     numero: "",
-    cep: ""
+    cep: "",
+    criador: {}
   };
 
   const [ObjFile, setObjFile] = useState('');
   const [ObjCurso, setObjCurso] = useState(curso);
 
+  const [ObjUsuario, setObjUsuario] = useState();
+
   const aoDigitar = (e) => {
     setObjCurso({ ...ObjCurso, [e.target.name]: e.target.value });
   };
 
-  function handleImage(e){
+  function handleImage(e) {
     setObjFile(e.target.files[0])
   }
 
-  const cadastrarCurso = () => {
+  useEffect(() => {
+    const encontrarUsuario = async () => {
+      fetch("http://localhost:8080/aprendex/usuario/findbyid", {
+        method: "post",
+        body: usuarioId,
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json"
+        }
+      })
+        .then((retorno) => retorno.json())
+        .then((retorno_convertido) => {
+          if (retorno_convertido.mensagem !== undefined) {
+            alert(retorno_convertido.mensagem);
+            window.location.href = "/home";
+          } else {
+            if (retorno_convertido.perfil.tipo === 1 || retorno_convertido.perfil.tipo === 2) {
+              setObjUsuario(retorno_convertido);
+              ObjCurso.criador = retorno_convertido;
+            } else {
+              alert("O seu usuário não tem acesso a essa página");
+              window.location.href = "/home";
+            }
+          }
+        });
+    };
+    encontrarUsuario();
+  }, [])
 
-    const data =  new FormData();
+  const cadastrarCurso = (event) => {
+    event.preventDefault();
 
-    data.append('file',ObjFile)
-    data.append('curso',JSON.stringify(ObjCurso))
+    const data = new FormData();
+
+    data.append('file', ObjFile)
+    data.append('curso', JSON.stringify(ObjCurso))
 
     fetch("http://localhost:8080/aprendex/curso/save", {
       method: "post",
@@ -46,13 +89,14 @@ function CadastroCurso() {
           alert(retorno_convertido.mensagem);
         } else {
           alert("Curso cadastrado com sucesso");
+          window.location.href = '/home'
         }
       });
   };
 
   const checkCEP = (e) => {
     const cep = e.target.value.replace(/\D/g, '')
-    console.log(cep.length )
+    console.log(cep.length)
     if (cep.length === 8) {
       fetch(`https://viacep.com.br/ws/${cep}/json/`)
         .then(res => res.json())
@@ -61,10 +105,12 @@ function CadastroCurso() {
             ObjCurso.endereco = data.logradouro + ", " + ObjCurso.numero + " - " + data.bairro + " - " + data.localidade + " - " + data.uf
           } else {
             alert("CEP inválido. Por favor, verifique o CEP inserido.");
+            document.getElementById('cep').value = '';
           }
         })
     } else {
       alert("CEP inválido. Por favor, verifique o CEP inserido.");
+      document.getElementById('cep').value = '';
     }
   }
 
@@ -73,7 +119,7 @@ function CadastroCurso() {
       <div className="bodyCadastroCurso">
         <div className="containerCadastroCurso">
           <div className="formCadastroCurso">
-            <form>
+            <form className="formformCadastroCurso" onSubmit={cadastrarCurso}>
               <div className="form-headerCadastroCurso">
                 <div className="title">
                   <h1>Cadastro de Curso</h1>
@@ -91,18 +137,6 @@ function CadastroCurso() {
                     onChange={aoDigitar}
                   />
                 </div>
-
-                <div className="input-box">
-                  <label htmlFor="descricao">Descrição do Curso</label>
-                  <input
-                    placeholder="Digite a descrição do curso"
-                    required
-                    id="descricao"
-                    type="text"
-                    name="descricao"
-                    onChange={aoDigitar}
-                  />
-                </div>
                 <div className="input-box">
                   <label htmlFor="link">Link</label>
                   <input
@@ -114,9 +148,20 @@ function CadastroCurso() {
                     onChange={aoDigitar}
                   />
                 </div>
+                <div className="input-box">
+                  <label htmlFor="vagas">Vagas</label>
+                  <input
+                    placeholder="Quantidade de vagas"
+                    required
+                    id="vagas"
+                    type="number"
+                    name="vagas"
+                    onChange={aoDigitar}
+                  />
+                </div>
               </div>
               <div className="input-group">
-              <div className="input-box">
+                <div className="input-box">
                   <label htmlFor="NUMERO">Numero</label>
                   <input
                     placeholder="N° Residencial"
@@ -151,6 +196,8 @@ function CadastroCurso() {
                     onChange={aoDigitar}
                   />
                 </div>
+              </div>
+              <div className="input-group">
                 <div className="input-box">
                   <label htmlFor="duracao">Duração</label>
                   <input
@@ -162,8 +209,6 @@ function CadastroCurso() {
                     onChange={aoDigitar}
                   />
                 </div>
-              </div>
-              <div className="input-group">
                 <div className="input-box">
                   <label htmlFor="email">Email</label>
                   <input
@@ -186,19 +231,19 @@ function CadastroCurso() {
                     onChange={aoDigitar}
                   />
                 </div>
-                <div className="input-box">
-                  <label htmlFor="vagas">Vagas</label>
-                  <input
-                    placeholder="Quantidade de vagas"
+              </div>
+              
+              <div className="input-group">
+              <div className="input-box">
+                  <label htmlFor="descricao">Descrição do Curso</label>
+                  <textarea
                     required
-                    id="vagas"
-                    type="number"
-                    name="vagas"
+                    id="descricao"
+                    name="descricao"
                     onChange={aoDigitar}
+                    className="input-box"
                   />
                 </div>
-              </div>
-              <div className="input-group">
                 <div className="input-box">
                   <label htmlFor="imagem">Imagem</label>
                   <input
@@ -213,12 +258,10 @@ function CadastroCurso() {
                 </div>
               </div>
               <div className="continue-button">
-                <input
-                  className="inputLogin"
-                  type="button"
-                  value="Cadastrar"
-                  onClick={cadastrarCurso}
-                />
+              <button
+                className="inputLogin"
+                type="submit"
+              >Cadastrar</button>
               </div>
             </form>
           </div>

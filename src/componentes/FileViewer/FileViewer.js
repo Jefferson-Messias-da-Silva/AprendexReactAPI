@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 function FileViewer(cursoId){
     const [imageSrc,setImageSrc] = useState('');
 
-    console.log(cursoId)
-
     useEffect(() => {
         const acharImagem = async () => {
             const response = await fetch("http://localhost:8080/aprendex/arquivo/pegar", {

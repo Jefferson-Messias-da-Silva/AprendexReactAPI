@@ -2,6 +2,17 @@ import React, { useState, useEffect } from "react";
 import "./stylesAlteraCurso.css";
 
 function AlteraCurso() {
+
+    function logado() {
+        if (localStorage.getItem('usuarioSessao') === null) {
+            alert('Para acessar essa página você precisa realizar o login!')
+            window.location.href = "/home"
+        }
+    }
+
+    logado();
+
+
     const curso = {
         nome: "",
         descricao: "",
@@ -14,7 +25,8 @@ function AlteraCurso() {
         vagas: "",
         cep: "",
         numero: "",
-        presencial: false
+        presencial: false,
+        criador: {}
     };
 
     const [ObjCurso, setObjCurso] = useState(curso)
@@ -22,7 +34,6 @@ function AlteraCurso() {
     const usuarioId = localStorage.getItem('usuarioSessao')
 
     const cursoId = window.location.pathname.split('/').pop();
-
     const aoDigitar = (e) => {
         setObjCurso({ ...ObjCurso, [e.target.name]: e.target.value });
     };
@@ -43,16 +54,19 @@ function AlteraCurso() {
                         alert(retorno_convertido.mensagem);
                         window.location.href = "/home";
                     } else {
-                        setObjCurso(retorno_convertido);
-                        if (ObjCurso.usuarioId !== usuarioId) {
+                        console.log(retorno_convertido.criador)
+                        if (retorno_convertido.criador.id !== usuarioId) {
                             alert("O seu usuário não tem permissão para acessar essa página")
                             window.location.href = "/home";
+                        } else {
+                            setObjCurso(retorno_convertido);
                         }
                     }
                 });
         };
         encontrarCurso();
     }, [])
+
 
     const checkCEP = (e) => {
         const cep = e.target.value.replace(/\D/g, '')
@@ -65,14 +79,17 @@ function AlteraCurso() {
                         ObjCurso.endereco = data.logradouro + ", " + ObjCurso.numero + " - " + data.bairro + " - " + data.localidade + " - " + data.uf
                     } else {
                         alert("CEP inválido. Por favor, verifique o CEP inserido.");
+                        document.getElementById('cep').value = '';
                     }
                 })
         } else {
             alert("CEP inválido. Por favor, verifique o CEP inserido.");
+            document.getElementById('cep').value = '';
         }
     }
 
-    const alterar = () => {
+    const alterar = (event) => {
+        event.preventDefault();
         fetch("http://localhost:8080/aprendex/curso/alter", {
             method: "post",
             body: JSON.stringify(ObjCurso),
@@ -100,7 +117,7 @@ function AlteraCurso() {
             <div className="alteraCursocontainer">
                 <div className="alteraCursoform">
                     <h2 className="alteraCursoform-header editcurso-header">Editar Curso</h2>
-                    <form>
+                    <form onSubmit={alterar}>
                         <div className="alteraCursoinput-group">
                             <div className="alteraCursoinput-box">
                                 <label>Nome do Curso:</label>
@@ -109,6 +126,7 @@ function AlteraCurso() {
                                     value={ObjCurso.nome}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="nome"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -117,6 +135,7 @@ function AlteraCurso() {
                                     value={ObjCurso.descricao}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="descricao"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -126,6 +145,7 @@ function AlteraCurso() {
                                     value={ObjCurso.link}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="link"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -135,6 +155,7 @@ function AlteraCurso() {
                                     value={ObjCurso.numero}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="numero"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -145,6 +166,7 @@ function AlteraCurso() {
                                     onChange={aoDigitar}
                                     onBlur={checkCEP}
                                     className="input-box"
+                                    name="cep"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -154,6 +176,7 @@ function AlteraCurso() {
                                     value={ObjCurso.categoria}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="categoria"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -163,6 +186,7 @@ function AlteraCurso() {
                                     value={ObjCurso.duracao}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="duracao"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -172,6 +196,7 @@ function AlteraCurso() {
                                     value={ObjCurso.email}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="email"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -181,6 +206,7 @@ function AlteraCurso() {
                                     value={ObjCurso.valor}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="email"
                                 />
                             </div>
                             <div className="alteraCursoinput-box">
@@ -190,20 +216,19 @@ function AlteraCurso() {
                                     value={ObjCurso.vagas}
                                     onChange={aoDigitar}
                                     className="input-box"
+                                    name="vagas"
                                 />
                             </div>
                         </div>
                         <div className="alteraCursocontinue-button alteraCursobutton-container">
-                            <input
+                            <button
                                 className="inputLogin"
-                                type="button"
-                                value="Alterar"
-                                onClick={alterar}
-                            />
+                                type="submit"
+                            >Alterar</button>
                             <input
-                                className="inputLogin"
                                 type="button"
                                 value="Cancelar"
+                                className="alteraCursocontinue-input"
                                 onClick={home}
                             />
                         </div>

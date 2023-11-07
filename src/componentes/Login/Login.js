@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
-import AppNavbar from "../AppNavBar";
+import { useState } from "react";
 import "./stylesLogin.css";
 import { ReactComponent as Img } from "../img/loginphoto.svg";
-import Cadastro from "../Cadastro/Cadastro";
 
 function Login() {
   const usuarioLogin = {
@@ -16,7 +14,9 @@ function Login() {
     setObjUsuarioLogin({ ...ObjUsuarioLogin, [e.target.name]: e.target.value });
   };
 
-  const login = () => {
+  const login = (event) => {
+    event.preventDefault();
+
     fetch("http://localhost:8080/aprendex/usuario/login", {
       method: "post",
       body: JSON.stringify(ObjUsuarioLogin),
@@ -31,6 +31,8 @@ function Login() {
           alert(retorno_convertido.mensagem);
         } else {
           localStorage.setItem("usuarioSessao", retorno_convertido.id);
+          alert("Login realizado com sucesso");
+          window.location.href = "/home"
         }
       });
   };
@@ -39,15 +41,24 @@ function Login() {
     window.location.href = "/cadastro"
   }
 
+  function logado(){
+    if(localStorage.getItem('usuarioSessao') !== null){
+      alert('Você já está Logado!')
+      window.location.href = "/home"
+    }
+  }
+
+  logado();
+
   return (
     <div className="bodyLogin">
     <div className="login-container">
       <div className="form-imageLogin">
-      <div className="form-image">
+      <div className="form-imageLogin">
         <Img />
       </div>
       </div>
-      <div className="formLogin">
+      <div className="formLogin" onSubmit={login} autoComplete='off'>
         <form>
           <div className="form-headerLogin">
             <div className="title">
@@ -82,9 +93,8 @@ function Login() {
           <div className="continue-button">
             <input
               className="inputLogin"
-              type="button"
+              type="submit"
               value="Login"
-              onClick={login}
             />
           </div>
         </form>
