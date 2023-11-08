@@ -11,9 +11,14 @@ function Perfil() {
 
     console.log(usuarioId)
 
-    const [ObjUsuario, setObjUsuario] = useState();
-    const [ObjCursoFavorito,setObjCursoFavorito] = useState()
+    const [ObjUsuario, setObjUsuario] = useState("");
+    const [ObjCursoFavorito,setObjCursoFavorito] = useState("")
     const [fetchConcluido, setFetchConcluido] = useState(false);
+
+    const [ObjMeusCursos, setObjMeusCursos] = useState("");
+    const [fetchMeusCursosConcluido, setFetchMeusCursosConcluido] = use("");
+
+    const [fetchFavoritosConcluido, setFetchFavoritosConcluido] = useState(false);
 
     useEffect(() => {
         const encontrarUsuario = async () => {
@@ -39,6 +44,54 @@ function Perfil() {
         };
         encontrarUsuario();
       },[])
+
+      useEffect(() => {
+        const encontraFavoritos = async () => {
+          fetch("http://localhost:8080/aprendex/curso/favoritos", {
+            method: "post",
+            body: usuarioId,
+            headers: {
+              "Content-type": "application/json",
+              Accept: "application/json"
+            }
+          })
+          .then((retorno) => retorno.json())
+          .then((retorno_convertido) => {
+            if (retorno_convertido.mensagem !== undefined) {
+              alert(retorno_convertido.mensagem);
+              window.location.href = "/home";
+            } else {
+              setObjCursoFavorito(retorno_convertido);
+              setFetchFavoritosConcluido(true);
+            }
+          });
+        };
+        encontraFavoritos();
+      },[])
+
+      useEffect(() => {
+        const encontraMeusCursos = async () => {
+          fetch("http://localhost:8080/aprendex/matricula/matriculas", {
+            method: "post",
+            body: usuarioId,
+            headers: {
+              "Content-type": "application/json",
+              Accept: "application/json"
+            }
+          })
+          .then((retorno) => retorno.json())
+          .then((retorno_convertido) => {
+            if (retorno_convertido.mensagem !== undefined) {
+              alert(retorno_convertido.mensagem);
+              window.location.href = "/home";
+            } else {
+              setObjMeusCursos(retorno_convertido);
+              setFetchMeusCursosConcluido(true);
+            }
+          });
+        };
+        encontraMeusCursos();
+      },[])
  
   return (
     <div className="container">
@@ -50,7 +103,7 @@ function Perfil() {
             <p>Carregando...</p>
         )
         }
-        {fetchConcluido  ? (
+        {fetchFavoritosConcluido  ? (
       <div className="conteudo" style={{ marginLeft: '250px' }}>
         <h1>Meus Favoritos</h1>
         <Content cursos={ObjCursoFavorito} /><a href="/curso/favorito">Ver todos</a>
@@ -59,10 +112,14 @@ function Perfil() {
           <p>Carregando...</p>
         )
       }
+      {fetchMeusCursosConcluido ? (
       <div className="conteudo" style={{ marginLeft: '250px' }}>
         <h1>Meus Cursos</h1>
        <a href="/curso/meuscursos">Ver todos</a>
       </div>
+      ) :
+      <p>Carregando...</p>
+      }
       <div className="conteudo" style={{ marginLeft: '250px' }}>
         <h1>Meus Certificados</h1>
         <a href="/curso/certificado">Ver todos</a>

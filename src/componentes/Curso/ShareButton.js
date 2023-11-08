@@ -11,14 +11,15 @@ const ShareIconStyled = styled(FontAwesomeIcon)`
   font-size: 2em;
 `;
 
-function ShareButton() {
+function ShareButton(link) {
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Meu Site",
-          text: "Confira este incrível conteúdo!",
-          url: "https://meusite.com"
+          title: "Aprendex",
+          text: "Confira este curso!",
+          url: link.link
         });
       } catch (error) {
         console.error("Houve um erro ao tentar compartilhar", error);

@@ -2,9 +2,10 @@ import React from 'react';
 import './Content.css';
 
 function Content(cursos) {
+
   return (
     <div className="content-container">
-      {cursos.cursos.map((curso,i) => (      
+      {cursos.cursos.slice(0,3).map((curso,i) => (      
       <div key={i} className="content-item">
         <h2>{curso.nome}</h2>
         <p>{curso.descricao}</p>

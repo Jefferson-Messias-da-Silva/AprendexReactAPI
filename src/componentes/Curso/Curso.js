@@ -8,13 +8,18 @@ import FileViewer from "../FileViewer/FileViewer";
 
 function Curso() {
 
+  const urlCurso = window.location.href;
+
   const cursoId = window.location.pathname.split('/').pop();
 
   const usuarioId = localStorage.getItem('usuarioSessao')
 
   const [Curso, setCurso] = useState("")
 
-  const [Criador, setCriador] = useState()
+  const [Criador, setCriador] = useState("")
+
+  const [fetchConcluido, setFetchConcluido] = useState(false);
+
 
   const requestData = {
     usuarioId: usuarioId,
@@ -41,6 +46,7 @@ function Curso() {
             var criadorId = retorno_convertido.criador.id
             console.log(Criador)
             encontrarCriador(criadorId);
+            setFetchConcluido(true);
           }
         });
     };
@@ -101,7 +107,7 @@ function Curso() {
         <div className="titulo-container">
           <h1 className="titulo">{Curso.nome}</h1>
           <FavoritoButton />
-          <ShareButton />
+          <ShareButton link={urlCurso} />
         </div>
         <p className="subtitulo"> Duração: {Curso.duracao}h | Proximidade: 0KM </p>
         <div className="instituicao-container">
@@ -126,9 +132,10 @@ function Curso() {
       <div className="button-container">
         <button className="button" onClick={matricular}>Matricule-se</button>
       </div>
-
-      <Maps />
-
+      {fetchConcluido ? (
+      <Maps Curso={Curso} />
+      ) : (<p>Carregando...</p>)
+      }
     </div>
   );
 }
