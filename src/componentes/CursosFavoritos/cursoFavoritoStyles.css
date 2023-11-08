@@ -1,0 +1,116 @@
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+}
+
+.form-header h1::after {
+    content: "";
+    display: block;
+    width: 9rem;
+    height: 0.3rem;
+    background-color: #66cdf4;
+    margin: 0 auto;
+    position: absolute;
+    border-radius: 10px;
+}
+
+.container {
+    max-width: 1300px;
+    width: 100%;
+    margin: auto;
+    padding: 0px 20px;
+}
+
+.CFh1 {
+    margin-top: 100px;
+    font-size: 40px;
+    margin-bottom: 40px;
+    margin-left: 40px;
+}
+
+.CFp {
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.CFh3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.card {
+    position: relative;
+    flex: 0 0 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+    border: 2px solid transparent;
+    width: 900px;
+    height: 400px;
+    margin-left: 50px;
+}
+
+.card:hover {
+    border-color: #a8a8a8;
+}
+
+.btn {
+    position: absolute;
+    bottom: 20px;
+    /* Ajuste conforme necessário */
+    right: 20px;
+    /* Ajuste conforme necessário */
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 10px;
+    max-width: 120px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: #66cdf4;
+    padding: 0.4rem 1rem;
+}
+
+.btn:hover {
+    background: transparent;
+    color: #a8a8a8;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 30px;
+        line-height: 40px;
+        font-weight: 600;
+        color: #000000c0;
+    }
+
+    .card {
+        flex: 0 0 calc(100% - 20px);
+        max-width: calc(100% - 20px);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #000000c0;
+    }
+}

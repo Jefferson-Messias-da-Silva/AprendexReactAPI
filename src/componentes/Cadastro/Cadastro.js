@@ -129,7 +129,7 @@ function Cadastro() {
         <label htmlFor="data">Data de Nascimento</label>
         <input
           id="dtnascimento"
-          type="text"
+          type="date"
           name="dtnascimento"
           onChange={aoDigitar}
           required

@@ -16,7 +16,10 @@ function Perfil() {
     const [fetchConcluido, setFetchConcluido] = useState(false);
 
     const [ObjMeusCursos, setObjMeusCursos] = useState("");
-    const [fetchMeusCursosConcluido, setFetchMeusCursosConcluido] = use("");
+    const [fetchMeusCursosConcluido, setFetchMeusCursosConcluido] = useState("");
+
+    const [ObjCertificados, setObjCertificados] = useState("");
+    const [fetchObjCertificadosConcluido, setFetchObjCertificadosConcluido] = useState("");
 
     const [fetchFavoritosConcluido, setFetchFavoritosConcluido] = useState(false);
 
@@ -82,8 +85,7 @@ function Perfil() {
           .then((retorno) => retorno.json())
           .then((retorno_convertido) => {
             if (retorno_convertido.mensagem !== undefined) {
-              alert(retorno_convertido.mensagem);
-              window.location.href = "/home";
+              setObjMeusCursos("");
             } else {
               setObjMeusCursos(retorno_convertido);
               setFetchMeusCursosConcluido(true);
@@ -92,6 +94,29 @@ function Perfil() {
         };
         encontraMeusCursos();
       },[])
+
+      useEffect(() => {
+        const encontrarCertificado = async () => {
+          fetch("http://localhost:8080/aprendex/matricula/findfim", {
+            method: "post",
+            body: usuarioId,
+            headers: {
+              "Content-type": "application/json",
+              Accept: "application/json"
+            }
+          })
+            .then((retorno) => retorno.json())
+            .then((retorno_convertido) => {
+              if (retorno_convertido.mensagem !== undefined) {
+                setObjCertificados("")
+              } else {
+                setObjCertificados(retorno_convertido)
+                setFetchObjCertificadosConcluido(true)
+              }
+            });
+        };
+        encontrarCertificado();
+      }, []);
  
   return (
     <div className="container">
@@ -106,7 +131,8 @@ function Perfil() {
         {fetchFavoritosConcluido  ? (
       <div className="conteudo" style={{ marginLeft: '250px' }}>
         <h1>Meus Favoritos</h1>
-        <Content cursos={ObjCursoFavorito} /><a href="/curso/favorito">Ver todos</a>
+        <Content cursos={ObjCursoFavorito} />
+        <a href="/curso/favorito">Ver todos</a>
       </div>
         ) : (
           <p>Carregando...</p>
@@ -115,16 +141,22 @@ function Perfil() {
       {fetchMeusCursosConcluido ? (
       <div className="conteudo" style={{ marginLeft: '250px' }}>
         <h1>Meus Cursos</h1>
+        <Content cursos={ObjMeusCursos} /><a href="/curso/favorito">Ver todos</a>
        <a href="/curso/meuscursos">Ver todos</a>
       </div>
-      ) :
-      <p>Carregando...</p>
+      ) : ''
       }
+      {fetchObjCertificadosConcluido ? (
       <div className="conteudo" style={{ marginLeft: '250px' }}>
         <h1>Meus Certificados</h1>
+        <Content cursos={ObjCertificados} /><a href="/curso/favorito">Ver todos</a>
         <a href="/curso/certificado">Ver todos</a>
-      </div>
+      </div>) : (
+        "")
+      
+      }
     </div>
+    
   );
 }
 

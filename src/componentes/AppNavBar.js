@@ -12,7 +12,7 @@ function Navbar() {
   };
   const navigate = useNavigate();
   const buscar = () => {
-    navigate(`/teste/${busca}`);
+    navigate(`/curso/busca/${busca}`);
   };
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);

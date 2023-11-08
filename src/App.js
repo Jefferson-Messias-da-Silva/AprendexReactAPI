@@ -9,10 +9,14 @@ import AlteraUsuario from "./componentes/AlteraUsuario/AlteraUsuario";
 import Curso from "./componentes/Curso/Curso";
 import EsqueceuASenha from "./componentes/EsqueceuASenha/EsqueceuASenha";
 import MudarSenha from "./componentes/MudarSenha/MudarSenha";
-import FileViewer from "./componentes/FileViewer/FileViewer";
 import AppNavBar from "./componentes/AppNavBar"
 import Perfil from "./componentes/Perfil/Perfil";
 import AlteraCurso from "./componentes/AlteraCurso/AlteraCurso";
+import TodosOsCursos from "./componentes/TodosOsCursos/TodosOsCursos";
+import Certificados from "./componentes/Certificados/Certificados";
+import Busca from "./componentes/Busca/Busca"
+import CursoFavorita from "./componentes/CursosFavoritos/CursoFavorita";
+import GerenciaMatricula from "./componentes/GerenciaMatriculas/GerenciaMatriculas";
 
 function App() {
   return (
@@ -30,6 +34,11 @@ function App() {
         <Route path="/usuario/mudarSenha/:token" element={<MudarSenha/>}/>
         <Route path="/usuario/perfil" element={<Perfil/>}/>
         <Route path="/curso/altera/:id" element={<AlteraCurso/>} />
+        <Route path="/curso/todos" element={<TodosOsCursos/>} />
+        <Route path="/certificados" element={<Certificados/>}/>
+        <Route path="/curso/busca/:nome" element={<Busca/>} />
+        <Route path="/curso/favoritos" element={<CursoFavorita/>} />
+        <Route path="/curso/matricula" element={<GerenciaMatricula/>}/>
       </Routes>
     </Router>
   );
